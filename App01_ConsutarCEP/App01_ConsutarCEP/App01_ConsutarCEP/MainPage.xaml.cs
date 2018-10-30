@@ -25,22 +25,37 @@ namespace App01_ConsutarCEP
 
             if (isValidCep(cep))
             {
-                Endereco end = ViaCEPServico.BuscarEnderecoViaCEP(cep);
+                try
+                {
+                    Endereco end = ViaCEPServico.BuscarEnderecoViaCEP(cep);
+                    if (end != null)
+                    {
 
-                RESULTADO.Text = string.Format("Endereço: Rua: {2} - {3},  Cidade: {0} - {1}", end.localidade, end.uf, end.logradouro, end.bairro);
+                        RESULTADO.Text = string.Format("Endereço: Rua: {2} - {3},  Cidade: {0} - {1}", end.localidade, end.uf, end.logradouro, end.bairro);
+                    }
+                    else
+                    {
+                        DisplayAlert("Erro", "O Endereço não foi encontrado para o cep informado", "OK");
+                    }
+                }
+
+                catch (Exception e)
+                {
+                    DisplayAlert("Erro Crítico", e.Message, "OK");
+                }
             }
         }
 
         private bool isValidCep(string cep)
         {
             bool valido = true;
-            if(cep.Length != 8)
+            if (cep.Length != 8)
             {
                 DisplayAlert("Erro", "CEP Inválido! O CEP deve conter 8 caracteres", "OK");
                 valido = false;
             }
             int NovoCEP = 0;
-            if(!int.TryParse(cep, out NovoCEP))
+            if (!int.TryParse(cep, out NovoCEP))
             {
                 DisplayAlert("Erro", "CEP Inválido! O CEP deve ser composto apenas por números ", "OK");
 
